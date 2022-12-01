@@ -31,11 +31,10 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 24
     }
 }
 
 dependencies {
-    implementation 'com.github.HBiSoft:HBRecorder:2.0.4'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
+    api 'com.github.HBiSoft:HBRecorder:2.0.4'
 }

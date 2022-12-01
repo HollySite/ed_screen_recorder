@@ -65,10 +65,11 @@ class EdScreenRecorder {
     watcher = FileWatcher(file.path);
   }
 
-  Future<Map<String, dynamic>> stopRecord() async {
+  Future<Map<String, dynamic>> stopRecord({bool autoSaveToAlbum = false}) async {
     var dateNow = DateTime.now().microsecondsSinceEpoch;
     var response = await _channel.invokeMethod('stopRecordScreen', {
       "enddate": dateNow,
+      "autoSaveToAlbum": autoSaveToAlbum,
     });
 
     var formatResponse = RecordOutput.fromJson(json.decode(response));

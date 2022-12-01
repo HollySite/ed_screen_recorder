@@ -70,9 +70,9 @@ public class SwiftEdScreenRecorderPlugin: NSObject, FlutterPlugin {
         myResult = result
 
     }else if(call.method == "stopRecordScreen"){
-        
+        Bool autoSaveToAlbum=((args?["autoSaveToAlbum"] as? Bool?)! ?? false)!
         if(videoWriter != nil){
-            self.success=Bool(stopRecording())
+            self.success=Bool(stopRecording(autoSaveToAlbum: autoSaveToAlbum))
             self.filePath=NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
             self.isProgress=Bool(false)
             self.eventName=String("stopRecordScreen")
@@ -208,7 +208,7 @@ public class SwiftEdScreenRecorderPlugin: NSObject, FlutterPlugin {
         return  Bool(res)
     }
 
-    @objc func stopRecording() -> Bool {
+    @objc func stopRecording(autoSaveToAlbum: Bool) -> Bool {
         var res : Bool = true;
         if(recorder.isRecording){
             if #available(iOS 11.0, *) {
@@ -230,10 +230,12 @@ public class SwiftEdScreenRecorderPlugin: NSObject, FlutterPlugin {
             }
 
             self.videoWriter?.finishWriting {
-                print("Finished writing video");
-                PHPhotoLibrary.shared().performChanges({
-                    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: self.videoOutputURL!)
-                })
+                if autoSaveToAlbum {
+                    print("Finished writing video");
+                    PHPhotoLibrary.shared().performChanges({
+                        PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: self.videoOutputURL!)
+                    })
+                }
                 self.message="stopRecordScreenFromApp"
             }
         }else{

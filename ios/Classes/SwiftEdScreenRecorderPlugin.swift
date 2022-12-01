@@ -70,7 +70,8 @@ public class SwiftEdScreenRecorderPlugin: NSObject, FlutterPlugin {
         myResult = result
 
     }else if(call.method == "stopRecordScreen"){
-        Bool autoSaveToAlbum=((args?["autoSaveToAlbum"] as? Bool?)! ?? false)!
+        let args = call.arguments as? Dictionary<String, Any>
+        let autoSaveToAlbum: Bool=((args?["autoSaveToAlbum"] as? Bool?)! ?? false)!
         if(videoWriter != nil){
             self.success=Bool(stopRecording(autoSaveToAlbum: autoSaveToAlbum))
             self.filePath=NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
